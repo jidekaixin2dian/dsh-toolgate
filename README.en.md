@@ -1,40 +1,45 @@
 # Toolgate
 
-**0.1.3** adds the operation audit log, backup retention cap, the `allowSessionOverride` config and stricter API validation. See [Changelog](CHANGELOG.md) and [Security](SECURITY.md).
+**Bring only the tools you need into the next prompt.**
 
-Manage MCP servers and skills in DeepSeek Harness, and choose which tools enter the next prompt.
+[中文](README.md) · [Marketplace](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [Download](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [Changelog](CHANGELOG.md)
 
-[中文](README.md)
+Manage MCP servers, skills and tool visibility in one DSH settings page. Hide schemas by server and restore them when needed; MCP processes keep running.
 
-Every MCP tool carries a full JSON Schema into the request. A server with dozens of tools can take up more context than the conversation itself.
+![Tool grouping illustration; example counts are not measured savings](assets/readme-schema-v2.svg)
 
-![Tool schema count](assets/readme-schema-v2.svg)
+| Tab | What it does |
+|---|---|
+| Budget | Estimate context usage, hide groups / all MCP / the largest group, restore tools |
+| MCP servers | Add, edit, enable, disable and remove stdio or streamable-http servers |
+| Skills | Search, create and toggle by Session workspace; move eligible local skills to trash |
 
-The plugin separates configuration from exposure. Configuration owns servers and skills; exposure decides which schemas this turn carries.
+## Install and update
 
-## Install
+Requires **DSH >=0.2.1-rc.2 and Node >=24**. CI verifies DSH rc.2 / rc.3.
 
-```sh
-dsh plugin --profile <profile> add https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest/download/dsh-toolgate.tgz
+Search for **dsh-toolgate**, author **jidekaixin2dian**, in the marketplace. The GitHub installation source follows maintained release versions and supports checking updates under installed plugins. Catalog caches may take time to refresh.
+
+Alternatively, quit DSH and run the same command to install or update, then reopen it:
+
+```powershell
+dsh plugin --profile desktop add github:jidekaixin2dian/dsh-toolgate
 ```
 
-On the desktop app, install through its plugin manager when that manager owns the profile. After installing or updating the host half, quit and reopen DSH. The desktop app has no browser-style `Ctrl+R` hard refresh.
+Offline packages are available in [Releases](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest). While Desktop owns a running profile, use its plugin manager and respect profile locks.
 
-Requires Node >=24 and DSH `>=0.2.1-rc.2` (CI continuously verifies 0.2.1-rc.2 and 0.2.1-rc.3). Management endpoints require the host's `connection.requestRejection()` and current `profileContext`; integration tests pin DSH **0.2.1-rc.3**. Missing authentication closes the endpoint. A missing profile never falls back to an arbitrary installed profile.
+## Get started
 
-## Use
+1. Open **Settings → Toolgate** and review groups under Budget.
+2. Hide groups this task does not need. Changes apply from the next prompt and can be reversed.
+3. Before changing MCP or skills, verify the configuration scope or selected workspace Session.
 
-Open **Settings -> Toolgate**.
+MCP edits preserve unrelated configuration and comments, back up before writing and reject ambiguous or read-only sources. Secret fields are retained by default and never returned in plaintext. Audit entries exclude secret values.
 
-**Toolgate** groups tools by MCP server, hides the groups this turn does not need, and restores them later. MCP processes keep running. All visible, hide all MCP, hide largest group and lean mode live here.
+Skills retain source identity. Only matching local `.dsh/skills/<name>` directories can move to `.trash`; shared, bundled, custom and virtual sources stay read-only.
 
-**MCP servers** add, edit, remove, enable or disable in the selected profile/global patch files, applied through HMR. YAML edits preserve sibling entries, unknown fields and comments. Originals are backed up under `DSH_HOME/backups/toolgate/`, keeping only the 20 most recent copies after successful writes. Every management write appends an audit line (operation, target, outcome, timestamp — never secret values) to `DSH_HOME/toolgate-audit.jsonl`. Environment/header values are not returned to the client: leave their replacement controls unchecked to retain them; checking a control and leaving it empty explicitly clears that map.
-
-Effective state follows the host: bundle → profile → global → launcher overlays. Toggles update the last writable layer. Editing keeps the definition in its original layer. Ambiguous IDs, dynamic target nodes, config overrides and read-only sources are rejected when they cannot be safely edited.
-
-**Skills** select a Session workspace before listing, creating, deleting or toggling. Project roots follow the host's nearest-`.git` rule, falling back to the Session cwd; user roots use the selected DSH_HOME. Rows retain provider/source/path identity. Only matching local `.dsh/skills/<name>/SKILL.md` directory bundles can move to `.trash`. Shared `.agents`, bundled, custom and virtual sources are read-only. Scoped providers that cannot be overridden have their toggle disabled.
-
-Model tool:
+<details>
+<summary>Session tool and fixed global settings</summary>
 
 ```text
 toolgate action=status
@@ -42,42 +47,23 @@ toolgate action=session disabled=["mcp:github", "skills"]
 toolgate action=reset
 ```
 
-`mcp` is the wildcard for all MCP servers; `mcp:<server>` targets one. The settings page applies globally to sessions and subagents; `action=session` overrides only the current session.
+`mcp` matches all MCP; `mcp:<server>` matches one. Settings apply globally to sessions and subagents, while Session overrides affect only that Session.
 
-Set `allowSessionOverride: false` in the plugin config to make the model tool read-only: `action=session` and `action=reset` return a notice and change nothing, while the global gate stays editable on the settings page. Use it when prompt injection might otherwise talk an agent into hiding audit tooling.
+Set `allowSessionOverride: false` to prevent the model from changing or resetting Session overrides. The settings page still controls the global gate.
 
-## How it works
-
-The budget half uses per-instance state and `ctx.tools.restrict({ deny })` during `agent/pre-step`. Unload lifts owned restrictions; Agent disposal clears its state. The MCP half edits parsed YAML nodes and uses the host composer for effective state. The skill half uses a rank-0 override provider with persisted source identities and project roots.
-
-Token numbers estimate serialized schema/description character counts, not provider tokenization, costs or latency. Known unhideable scoped tools are excluded from projected savings.
+</details>
 
 ## Boundaries
 
-- A dynamic MCP manager that registers tools in the agent scope cannot be hidden by `ctx.tools.restrict`; use that manager's unload.
-- MCP CRUD writes `cordis.patch.yml`. Review the diff if you hand-edited the file.
-- ZIP or folder import of skills is not implemented. A skill found only in a scoped provider may not be hideable.
-- Host and client half updates both need an app restart.
-- Hiding tools is context budgeting, not a permission sandbox. Session overrides can restore groups; MCP processes keep running.
-- Configuration backups contain original secrets. Keep them private; see [SECURITY.md](SECURITY.md).
+- Hiding tools is context budgeting, **not a permission sandbox**. MCP processes keep running; permitted Session overrides can restore tools.
+- Token estimates use schema / description length. Neither estimates nor illustrated counts establish cost or latency savings.
+- Some dynamically scoped tools cannot be hidden; use their manager to unload them. Skill ZIP / folder import is not implemented.
+- MCP management writes configuration. Review changes to hand-edited files. Backups under `DSH_HOME/backups/toolgate/` retain the latest 20 after successful writes and **may contain original secrets; keep them private**.
+- Audit records are stored in `DSH_HOME/toolgate-audit.jsonl`. Management requires host authentication and the current profile, failing closed if either is missing.
+- Plugin updates require an app restart; existing MCP configuration changes can hot reload through the host.
 
-## Development
+To remove, quit DSH, run `dsh plugin --profile desktop remove @jidekaixin2dian/dsh-toolgate`, then reopen it.
 
-```sh
-npm ci --ignore-scripts --legacy-peer-deps
-npm test
-npm run setup:host
-npm run test:host
-npm run pack:check
-```
+[Development and verification](https://github.com/jidekaixin2dian/dsh-toolgate/blob/main/docs/development.md) · [Security](SECURITY.md) · [Issues](https://github.com/jidekaixin2dian/dsh-toolgate/issues)
 
-Git and pnpm are required; the pinned host uses pnpm 11.28.5. Host source and temporary DSH_HOME data stay under `work/`, without production profiles or API keys. `TOOLGATE_HOST` can select an existing clean checkout at the exact pinned commit.
-
-Unit regressions cover precise YAML changes, complex arguments, patch precedence, failed-write rollback and path/source identity. The host suite uses real Cordis/tools/skills, HTTP and Cookie authentication. With `TOOLGATE_BROWSER=1` it also exercises the actual React settings page in Edge on Windows or Chromium on Linux (`npx --no-install playwright install --with-deps chromium`). CI runs unit, host, browser and package-install checks on Windows and Linux. These settings tests do not certify the complete Desktop shell or real-model behavior.
-
-[GitHub](https://github.com/jidekaixin2dian/dsh-toolgate) · [Releases](https://github.com/jidekaixin2dian/dsh-toolgate/releases) · MIT
-
-
-## Release verification
-
-Published releases are checked for tag/version consistency, archive files matching tagged source, and the GitHub download digest. Run **Release integrity** in Actions with a published tag to recheck it. Historical tags and assets remain unchanged.
+MIT · Independent community plugin, not affiliated with DeepSeek.

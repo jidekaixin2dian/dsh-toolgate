@@ -1,6 +1,13 @@
 # Changelog
 
-## Unreleased
+## 0.1.4 — 2026-10-26
+
+- 重整中英文 README：安装更新优先，保留兼容与权限边界，开发说明移入独立文档。
+- Refresh Chinese/English documentation and installation guidance; runtime behavior is unchanged.
+- 使用 GitHub 源安装以支持市场版本检查；包含尚未发包的 rc.2 / rc.3 宿主支持声明。
+
+
+## Previously unreleased compatibility metadata
 
 - Declare the supported host explicitly: `engines.dsh >=0.2.1-rc.2`, with CI
   continuously verifying both 0.2.1-rc.2 and 0.2.1-rc.3.
