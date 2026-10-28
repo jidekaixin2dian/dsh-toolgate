@@ -46,3 +46,8 @@ Unit regressions cover precise YAML changes, complex arguments, patch precedence
 ## Release verification
 
 Published releases are checked for tag/version consistency, archive files matching tagged source, and the GitHub download digest. Run **Release integrity** in Actions with a published tag to recheck it. Historical tags and assets remain unchanged.
+
+
+## npm 发布
+
+仅在已获发布授权后操作。新 tag 必须位于 main，完整 CI 成功，GitHub Release 归档与 tag 一致；然后从相同 tag 调度 `npm-publish.yml` 并填入相同版本 tag，直接发布校验后的 GitHub 归档。首次创建 npm 包需要浏览器登录与 2FA；包建立后配置该仓库的 Trusted Publisher（仅 `npm-publish.yml`），后续发布不保存长期 token。更新检测与一键安装由市场/官方安装器完成，插件不另写自更新器。

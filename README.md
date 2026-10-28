@@ -16,14 +16,14 @@
 
 ## 安装与更新
 
-需要 **DSH >=0.2.1-rc.2、Node >=24**；持续验证 DSH rc.2 / rc.3。
+需要 **DSH >=0.2.1-rc.2、Node >=24**；持续验证 DSH rc.2 / rc.3 / rc.4。
 
-在插件市场搜索 **dsh-toolgate**，确认作者为 **jidekaixin2dian**。市场 GitHub 安装源随已发布版本维护，可在「已安装」中检查更新；目录缓存可能稍后刷新。
+在插件市场搜索 **dsh-toolgate**，确认作者为 **jidekaixin2dian**。npm 与 GitHub 来源都支持版本检查；市场识别 npm 包后优先使用 npm，可在「已安装」中检查更新。目录映射可能稍后刷新。
 
 也可完全退出 DSH 后执行以下命令；再次执行即可更新，随后重新打开 DSH：
 
 ```powershell
-dsh plugin --profile desktop add github:jidekaixin2dian/dsh-toolgate
+dsh plugin --profile desktop add @jidekaixin2dian/dsh-toolgate --registry=https://registry.npmjs.org
 ```
 
 离线安装包见 [Release](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest)。桌面端运行期间请使用其插件管理器，遵守 profile 锁。
@@ -54,6 +54,8 @@ toolgate action=reset
 设置 `allowSessionOverride: false` 后，模型不能更改或重置会话覆盖；全局设置仍由设置页控制。
 
 </details>
+
+旧 `.tgz` 或本地安装用户可在同一 profile 执行上面的命令切换到 npm；已有 GitHub 源仍可更新。
 
 ## 使用边界
 

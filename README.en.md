@@ -16,14 +16,14 @@ Manage MCP servers, skills and tool visibility in one DSH settings page. Hide sc
 
 ## Install and update
 
-Requires **DSH >=0.2.1-rc.2 and Node >=24**. CI verifies DSH rc.2 / rc.3.
+Requires **DSH >=0.2.1-rc.2 and Node >=24**. CI verifies DSH rc.2 / rc.3 / rc.4.
 
-Search for **dsh-toolgate**, author **jidekaixin2dian**, in the marketplace. The GitHub installation source follows maintained release versions and supports checking updates under installed plugins. Catalog caches may take time to refresh.
+Search for **dsh-toolgate**, author **jidekaixin2dian**, in the marketplace. Both npm and GitHub sources support version checks. Once the catalog recognizes the npm package it prefers npm; existing users can check under installed plugins. Catalog mappings may take time to refresh.
 
 Alternatively, quit DSH and run the same command to install or update, then reopen it:
 
 ```powershell
-dsh plugin --profile desktop add github:jidekaixin2dian/dsh-toolgate
+dsh plugin --profile desktop add @jidekaixin2dian/dsh-toolgate --registry=https://registry.npmjs.org
 ```
 
 Offline packages are available in [Releases](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest). While Desktop owns a running profile, use its plugin manager and respect profile locks.
@@ -52,6 +52,8 @@ toolgate action=reset
 Set `allowSessionOverride: false` to prevent the model from changing or resetting Session overrides. The settings page still controls the global gate.
 
 </details>
+
+Existing `.tgz` or local installations can use the same command in the same profile to switch to npm; GitHub installs remain updatable.
 
 ## Boundaries
 

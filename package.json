@@ -1,6 +1,6 @@
 {
   "name": "@jidekaixin2dian/dsh-toolgate",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Manage MCP servers and skills in DeepSeek Harness, and control which tools enter the next prompt. Budget changes need no config edit or restart.",
   "icon": "icon.svg",
   "type": "module",
@@ -95,5 +95,9 @@
     "esbuild": "0.28.2",
     "react": "19.3.1",
     "react-dom": "19.3.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
