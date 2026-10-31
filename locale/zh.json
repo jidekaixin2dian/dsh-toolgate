@@ -1,7 +1,6 @@
 {
   "meta": {
-    "title": "工具闸门",
-    "description": "管理 MCP 服务器与 Skill，并控制下一轮 prompt 带入哪些工具。"
+    "title": "工具闸门 · Toolgate",
+    "description": "集中管理 MCP 服务器和 Skill，按组隐藏或恢复工具定义，控制下一轮 prompt 的工具占用。"
   }
 }
-
