@@ -1,12 +1,14 @@
-# Toolgate · 工具闸门
+# 工具闸门 · Toolgate
 
 **让下一轮 prompt 只带需要的工具。**
 
-[English](README.en.md) · [插件市场](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [下载](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [更新记录](CHANGELOG.md)
+[English](README.en.md) · [npm](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.1.6) · [插件市场](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [下载](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [更新记录](CHANGELOG.md)
 
-在 DSH 的一个设置页里管理 MCP 服务器、Skill 和工具可见性。按服务器隐藏整组工具 schema，需要时再恢复，MCP 进程继续运行。
+装了很多 MCP，却只有少数工具与当前任务有关？Toolgate 把 MCP 服务器、Skill 和工具可见性放在同一个 DSH 设置页里。按服务器隐藏整组工具定义，需要时再恢复；配置保留，MCP 进程继续运行。
 
 ![工具分组示意，示例数量不代表实测节省](assets/readme-schema-v2.svg)
+
+## 一处管理三件事
 
 | 页面 | 你可以做什么 |
 |---|---|
@@ -14,11 +16,19 @@
 | MCP 服务器 | 新增、编辑、启停、删除服务器；支持 stdio 与 streamable-http |
 | Skills | 按会话工作区搜索、新建、启停；可删除的本地 Skill 移到回收目录 |
 
+## 下载情况
+
+| GitHub Release 资源 · 历史累计 | npm 0.1.5 · 近 7 日 |
+|---|---|
+| [**471 次下载**](https://api.github.com/repos/jidekaixin2dian/dsh-toolgate/releases?per_page=100) | [**126 次下载**](https://api.npmjs.org/versions/@jidekaixin2dian%2Fdsh-toolgate/last-week) |
+
+统计快照：**2026-10-29**。GitHub 包含安装包、校验文件等资源请求；npm 仅统计表中版本。下载可能包含重复安装和自动化请求，不代表独立用户数，两列不相加。点击数字可查看实时来源。
+
 ## 安装与更新
 
 需要 **DSH >=0.2.1-rc.2、Node >=24**；持续验证 DSH rc.2 / rc.3 / rc.4。
 
-在插件市场搜索 **dsh-toolgate**，确认作者为 **jidekaixin2dian**。npm 与 GitHub 来源都支持版本检查；市场识别 npm 包后优先使用 npm，可在「已安装」中检查更新。目录映射可能稍后刷新。
+在插件市场搜索 **dsh-toolgate**，确认作者为 **jidekaixin2dian**。npm 与 GitHub 来源都支持版本检查；市场识别 npm 包后优先使用 npm，可在「已安装」中检查更新。目录与 registry 数据可能有同步延迟。
 
 也可完全退出 DSH 后执行以下命令；再次执行即可更新，随后重新打开 DSH：
 
@@ -58,6 +68,8 @@ toolgate action=reset
 旧 `.tgz` 或本地安装用户可在同一 profile 执行上面的命令切换到 npm；已有 GitHub 源仍可更新。
 
 ## 使用边界
+
+设置页底部的「项目与反馈」可打开本插件的 GitHub 项目或新建反馈，在三个标签页中都能找到。
 
 - 工具隐藏用于上下文预算，**不是权限沙箱**。MCP 进程不会因此停止；默认允许的会话覆盖可以恢复工具。
 - token 数与示意图都不代表实际费用或速度收益；token 仅按 schema / 描述长度估算。

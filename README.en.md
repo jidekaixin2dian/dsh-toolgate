@@ -1,12 +1,14 @@
-# Toolgate
+# Toolgate · 工具闸门
 
 **Bring only the tools you need into the next prompt.**
 
-[中文](README.md) · [Marketplace](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [Download](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [Changelog](CHANGELOG.md)
+[中文](README.md) · [npm](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.1.6) · [Marketplace](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [Download](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [Changelog](CHANGELOG.md)
 
-Manage MCP servers, skills and tool visibility in one DSH settings page. Hide schemas by server and restore them when needed; MCP processes keep running.
+Many MCP servers installed, but only a few relevant to the task? Toolgate brings MCP servers, skills and tool visibility into one DSH settings page. Hide tool definitions by server and restore them when needed; configuration stays in place and MCP processes keep running.
 
 ![Tool grouping illustration; example counts are not measured savings](assets/readme-schema-v2.svg)
+
+## Three jobs, one settings page
 
 | Tab | What it does |
 |---|---|
@@ -14,11 +16,19 @@ Manage MCP servers, skills and tool visibility in one DSH settings page. Hide sc
 | MCP servers | Add, edit, enable, disable and remove stdio or streamable-http servers |
 | Skills | Search, create and toggle by Session workspace; move eligible local skills to trash |
 
+## Downloads
+
+| GitHub release assets · all releases | npm 0.1.5 · past 7 days |
+|---|---|
+| [**471 downloads**](https://api.github.com/repos/jidekaixin2dian/dsh-toolgate/releases?per_page=100) | [**126 downloads**](https://api.npmjs.org/versions/@jidekaixin2dian%2Fdsh-toolgate/last-week) |
+
+Snapshot: **2026-10-29**. GitHub counts release-asset requests, including checksums; npm counts downloads of the named version. Requests can include repeat installs and automation, so these are not unique-user counts and the two columns are not added together. Click a number for its live source.
+
 ## Install and update
 
 Requires **DSH >=0.2.1-rc.2 and Node >=24**. CI verifies DSH rc.2 / rc.3 / rc.4.
 
-Search for **dsh-toolgate**, author **jidekaixin2dian**, in the marketplace. Both npm and GitHub sources support version checks. Once the catalog recognizes the npm package it prefers npm; existing users can check under installed plugins. Catalog mappings may take time to refresh.
+Search for **dsh-toolgate**, author **jidekaixin2dian**, in the marketplace. Both npm and GitHub sources support version checks. Once the catalog recognizes the npm package it prefers npm; existing users can check under installed plugins. Catalog and registry data may take time to refresh.
 
 Alternatively, quit DSH and run the same command to install or update, then reopen it:
 
@@ -56,6 +66,8 @@ Set `allowSessionOverride: false` to prevent the model from changing or resettin
 Existing `.tgz` or local installations can use the same command in the same profile to switch to npm; GitHub installs remain updatable.
 
 ## Boundaries
+
+**Project and feedback** at the bottom of every settings tab opens this plugin's GitHub repository or a new issue.
 
 - Hiding tools is context budgeting, **not a permission sandbox**. MCP processes keep running; permitted Session overrides can restore tools.
 - Token estimates use schema / description length. Neither estimates nor illustrated counts establish cost or latency savings.

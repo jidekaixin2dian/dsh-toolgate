@@ -1,7 +1,6 @@
 {
   "meta": {
-    "title": "Toolgate",
-    "description": "Manage MCP servers and skills in DeepSeek Harness, and control which tools enter the next prompt."
+    "title": "Toolgate · 工具闸门",
+    "description": "Manage MCP servers and skills in one place; hide or restore groups of tool definitions to control what enters the next prompt."
   }
 }
-

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.6 — 2026-10-31
+
+- 设置页新增「项目与反馈」入口，在预算、MCP、Skills 页面均可打开对应 GitHub 项目或新建反馈；页面加载失败时也保留入口。
+- Add project and issue links across settings tabs, including when the main settings panel fails to load.
+
 ## 0.1.5 — 2026-10-28
 
 - 发布与更新维护：明确 npm 安装、GitHub 来源迁移、市场检测与重启步骤；保留既有运行时行为。
