@@ -4,7 +4,7 @@
 
 [中文](README.md) · [npm](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.1.6) · [Marketplace](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [Download](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [Changelog](CHANGELOG.md)
 
-Many MCP servers installed, but only a few relevant to the task? Toolgate brings MCP servers, skills and tool visibility into one DSH settings page. Hide tool definitions by server and restore them when needed; configuration stays in place and MCP processes keep running.
+Toolgate is an MCP server, skill and context-budget management plugin for DeepSeek Harness (DSH). Have many MCP servers installed but only a few relevant to the task? Hide tool definitions by server in one settings page and restore them when needed; configuration stays in place and MCP processes keep running.
 
 ![Tool grouping illustration; example counts are not measured savings](assets/readme-schema-v2.svg)
 
@@ -15,6 +15,8 @@ Many MCP servers installed, but only a few relevant to the task? Toolgate brings
 | Budget | Estimate context usage, hide groups / all MCP / the largest group, restore tools |
 | MCP servers | Add, edit, enable, disable and remove stdio or streamable-http servers |
 | Skills | Search, create and toggle by Session workspace; move eligible local skills to trash |
+
+For example, hide MCP tool groups unrelated to a coding task to change the tool definitions supplied with the next prompt, then restore them when needed. The page estimates tokens from schema and description length; the estimate is not a measurement of cost or speed. Settings-page budgets apply to all sessions and subagents; permitted session overrides affect only that session.
 
 ## Downloads
 
