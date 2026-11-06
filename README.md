@@ -2,13 +2,13 @@
 
 **让下一轮 prompt 只带需要的工具。**
 
-[English](README.en.md) · [npm](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.1.7) · [插件市场](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [下载](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [更新记录](CHANGELOG.md)
+[English](README.en.md) · [npm · 0.1.8](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.1.8) · [插件市场](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [下载](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [更新记录](CHANGELOG.md)
 
-Toolgate 是 DeepSeek Harness（DSH）的 MCP、Skill 和上下文预算管理插件。装了很多 MCP，却只有少数工具与当前任务有关？在同一个设置页按服务器隐藏不需要的工具定义，需要时再恢复；配置保留，MCP 进程继续运行。
+Toolgate 为 DeepSeek Harness（DSH）提供统一的 MCP、Skill 和上下文预算设置页。按服务器隐藏当前用不到的工具定义，让下一轮 prompt 聚焦当前任务；需要时恢复，MCP 配置和连接保持。
 
 ![工具分组示意，示例数量不代表实测节省](assets/readme-schema-v2.svg)
 
-## 一处管理三件事
+## 隐藏工具定义，MCP 保持连接
 
 | 页面 | 你可以做什么 |
 |---|---|
@@ -16,15 +16,7 @@ Toolgate 是 DeepSeek Harness（DSH）的 MCP、Skill 和上下文预算管理�
 | MCP 服务器 | 新增、编辑、启停、删除服务器；支持 stdio 与 streamable-http |
 | Skills | 按会话工作区搜索、新建、启停；可删除的本地 Skill 移到回收目录 |
 
-例如，可以在写代码时隐藏与任务无关的 MCP 工具组，下一轮再交给模型的工具定义就会变化；需要时恢复。页面按工具 schema 和描述长度估算 token，占用与实际费用或速度不是同一指标。设置页预算作用于所有会话和子代理，允许的会话覆盖只影响当前会话。
-
-## 下载情况
-
-| GitHub Release 资源 · 历史累计 | npm 0.1.5 · 近 7 日 |
-|---|---|
-| [**471 次下载**](https://api.github.com/repos/jidekaixin2dian/dsh-toolgate/releases?per_page=100) | [**126 次下载**](https://api.npmjs.org/versions/@jidekaixin2dian%2Fdsh-toolgate/last-week) |
-
-统计快照：**2026-10-29**。GitHub 包含安装包、校验文件等资源请求；npm 仅统计表中版本。下载可能包含重复安装和自动化请求，不代表独立用户数，两列不相加。点击数字可查看实时来源。
+按组隐藏当前任务用不到的工具，需要时一键恢复。配置和运行中的 MCP 保留，下一轮 prompt 使用调整后的工具列表。页面按工具 schema 和描述长度估算 token，占用与实际费用或速度不是同一指标。设置页预算作用于所有会话和子代理，允许的会话覆盖只影响当前会话。
 
 ## 安装与更新
 
@@ -81,6 +73,14 @@ toolgate action=reset
 - 插件本身更新需要重开 DSH；已有 MCP 配置变更可由宿主热重载。
 
 卸载：退出 DSH 后执行 `dsh plugin --profile desktop remove @jidekaixin2dian/dsh-toolgate`，再重新打开。
+
+## 下载情况
+
+| GitHub 安装包 | npm | 合计 |
+|---:|---:|---:|
+| [467](https://api.github.com/repos/jidekaixin2dian/dsh-toolgate/releases?per_page=100) | [679](https://api.npmjs.org/downloads/point/2026-10-28:2026-11-04/@jidekaixin2dian%2Fdsh-toolgate) | **1,146 次** |
+
+统计于 2026-11-06；npm 数据截至 2026-11-04。GitHub 仅计安装包，npm 排除 `0.0.0-stage`。下载包含重复安装与自动化请求，不是独立用户数。
 
 [开发与验证](https://github.com/jidekaixin2dian/dsh-toolgate/blob/main/docs/development.md) · [安全说明](SECURITY.md) · [反馈问题](https://github.com/jidekaixin2dian/dsh-toolgate/issues)
 

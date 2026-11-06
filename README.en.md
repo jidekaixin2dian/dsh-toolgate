@@ -2,13 +2,13 @@
 
 **Bring only the tools you need into the next prompt.**
 
-[中文](README.md) · [npm](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.1.7) · [Marketplace](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [Download](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [Changelog](CHANGELOG.md)
+[中文](README.md) · [npm · 0.1.8](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.1.8) · [Marketplace](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [Download](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [Changelog](CHANGELOG.md)
 
-Toolgate is an MCP server, skill and context-budget management plugin for DeepSeek Harness (DSH). Have many MCP servers installed but only a few relevant to the task? Hide tool definitions by server in one settings page and restore them when needed; configuration stays in place and MCP processes keep running.
+Toolgate brings MCP servers, skills and context budgets into one DeepSeek Harness (DSH) settings page. Hide tool definitions by server to focus the next prompt on the current task, then restore them when needed. MCP configuration and connections stay in place.
 
 ![Tool grouping illustration; example counts are not measured savings](assets/readme-schema-v2.svg)
 
-## Three jobs, one settings page
+## Hide tool definitions without disconnecting MCP
 
 | Tab | What it does |
 |---|---|
@@ -16,15 +16,7 @@ Toolgate is an MCP server, skill and context-budget management plugin for DeepSe
 | MCP servers | Add, edit, enable, disable and remove stdio or streamable-http servers |
 | Skills | Search, create and toggle by Session workspace; move eligible local skills to trash |
 
-For example, hide MCP tool groups unrelated to a coding task to change the tool definitions supplied with the next prompt, then restore them when needed. The page estimates tokens from schema and description length; the estimate is not a measurement of cost or speed. Settings-page budgets apply to all sessions and subagents; permitted session overrides affect only that session.
-
-## Downloads
-
-| GitHub release assets · all releases | npm 0.1.5 · past 7 days |
-|---|---|
-| [**471 downloads**](https://api.github.com/repos/jidekaixin2dian/dsh-toolgate/releases?per_page=100) | [**126 downloads**](https://api.npmjs.org/versions/@jidekaixin2dian%2Fdsh-toolgate/last-week) |
-
-Snapshot: **2026-10-29**. GitHub counts release-asset requests, including checksums; npm counts downloads of the named version. Requests can include repeat installs and automation, so these are not unique-user counts and the two columns are not added together. Click a number for its live source.
+Hide tool groups unrelated to the current task and restore them in one click when needed. MCP configuration and running processes stay in place; the next prompt receives the updated tool list. The page estimates tokens from schema and description length; the estimate is not a measurement of cost or speed. Settings-page budgets apply to all sessions and subagents; permitted session overrides affect only that session.
 
 ## Install and update
 
@@ -79,6 +71,14 @@ Existing `.tgz` or local installations can use the same command in the same prof
 - Plugin updates require an app restart; existing MCP configuration changes can hot reload through the host.
 
 To remove, quit DSH, run `dsh plugin --profile desktop remove @jidekaixin2dian/dsh-toolgate`, then reopen it.
+
+## Downloads
+
+| GitHub archives | npm | Combined |
+|---:|---:|---:|
+| [467](https://api.github.com/repos/jidekaixin2dian/dsh-toolgate/releases?per_page=100) | [679](https://api.npmjs.org/downloads/point/2026-10-28:2026-11-04/@jidekaixin2dian%2Fdsh-toolgate) | **1,146 requests** |
+
+Snapshot: 2026-11-06; npm data through 2026-11-04. GitHub counts installation archives; npm excludes `0.0.0-stage`. Includes repeat installs and automation, not unique users.
 
 [Development and verification](https://github.com/jidekaixin2dian/dsh-toolgate/blob/main/docs/development.md) · [Security](SECURITY.md) · [Issues](https://github.com/jidekaixin2dian/dsh-toolgate/issues)
 
