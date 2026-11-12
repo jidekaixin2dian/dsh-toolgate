@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.2.0 — 2026-11-13（本地构建，未发布 / local build, unpublished）
+## 0.2.0 — 2026-11-13
+
+**为什么值得更新**：0.1.x 只能关 MCP / Skill / 记忆 / 定时这四类，ego、remote、watch、
+团队这些真正占地方的工具一个都关不掉，只能每轮带着进 prompt。0.2.0 把它们变成可关的组，
+`lite` 档在本机实测每轮省下约 1 万个 token 的工具 schema；同时修掉「按工具名隐藏其实
+没生效」——那个问题会让新按钮看起来按了没用。
 
 - 分组从写死改成**数据**：`DEFAULT_RULES` 自带 ego / memory / remote / watch /
   schedule / team，`toolgate.json` 的 `rules` 可按 id 覆盖或新增；`core` 仍然不可隐藏。
@@ -14,6 +19,12 @@
 - 保护名单 `PROTECTED_TOOLS`（read/write/edit/glob/grep/pwsh/present/todo_write/
   toolgate/ask_user_question）不会被任何配置隐藏，避免把自己锁死。
 - 会话级覆盖（`action=session`）沿用原有语义，参数改为按规则校验。
+
+**Why update**: 0.1.x could only switch MCP / Skill / memory / schedule, so ego,
+remote, watch and team tools — the ones that actually cost context — entered every
+prompt. They are switchable groups now; the `lite` preset measured roughly 10k
+fewer tool-schema tokens per turn here. It also fixes "hide by tool name does
+nothing", which made the new switches look broken.
 
 - Groups are data now: shipped `DEFAULT_RULES` plus per-id overrides in
   `toolgate.json`; ungrouped tools stay in the un-hideable `core`.

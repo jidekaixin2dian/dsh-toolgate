@@ -31,6 +31,22 @@ export function validateAsset(release, tag) {
   assert.equal(archives[0].name, 'dsh-toolgate.tgz')
 }
 
+// A published changelog is the only thing a user reads before deciding to
+// update. Draft wording ("本地构建，未发布" / "unpublished") left in place turns
+// the release notes into a reason *not* to update, so the pipeline refuses it.
+export function validateChangelog(text, version) {
+  const escaped = String(version).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const heading = new RegExp(`^##\\s+${escaped}(?:\\s|$)`, 'm')
+  const match = heading.exec(text)
+  assert.ok(match, `CHANGELOG.md has no ${version} section`)
+  const rest = text.slice(match.index + match[0].length)
+  const next = /^##\s+/m.exec(rest)
+  const body = next ? rest.slice(0, next.index) : rest
+  assert.doesNotMatch(body, /本地构建|未发布|unpublished|local build/i,
+    `The ${version} changelog still reads like an unreleased draft`)
+  assert.match(body, /\S{20,}/, `The ${version} changelog has no readable notes`)
+}
+
 function main() {
   const tag = process.argv[2] || ''
   assert.match(tag, /^v\d+\.\d+\.\d+(?:-[\w.-]+)?$/)
@@ -52,6 +68,7 @@ function main() {
   const jobs = api(`repos/${repo}/actions/runs/${validation.id}/jobs?filter=latest&per_page=100`).jobs
   validateChecks(jobs.map(job => ({ ...job, head_sha: head, app: { slug: 'github-actions' } })), head)
   validateAsset(api(`repos/${repo}/releases/tags/${encodeURIComponent(tag)}`), tag)
+  validateChangelog(fs.readFileSync('CHANGELOG.md', 'utf8'), JSON.parse(fs.readFileSync('package.json', 'utf8')).version)
   console.log(`Release preflight passed for ${tag} at ${head}`)
 }
 
