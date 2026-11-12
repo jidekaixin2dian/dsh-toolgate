@@ -2,7 +2,7 @@
 
 **让下一轮 prompt 只带需要的工具。**
 
-[English](README.en.md) · [npm · 0.1.8](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.1.8) · [插件市场](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [下载](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [更新记录](CHANGELOG.md)
+[English](README.en.md) · [npm · 0.2.0](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.2.0) · [插件市场](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [下载](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [更新记录](CHANGELOG.md)
 
 Toolgate 为 DeepSeek Harness（DSH）提供统一的 MCP、Skill 和上下文预算设置页。按服务器隐藏当前用不到的工具定义，让下一轮 prompt 聚焦当前任务；需要时恢复，MCP 配置和连接保持。
 
@@ -17,6 +17,20 @@ Toolgate 为 DeepSeek Harness（DSH）提供统一的 MCP、Skill 和上下文�
 | Skills | 按会话工作区搜索、新建、启停；可删除的本地 Skill 移到回收目录 |
 
 按组隐藏当前任务用不到的工具，需要时一键恢复。配置和运行中的 MCP 保留，下一轮 prompt 使用调整后的工具列表。页面按工具 schema 和描述长度估算 token，占用与实际费用或速度不是同一指标。设置页预算作用于所有会话和子代理，允许的会话覆盖只影响当前会话。
+
+## 0.2.0：分组是数据，不是写死的表
+
+| 能力 | 说明 |
+|---|---|
+| 自动分组 | 工具按注册名自动归组（`ego_`、`mnemon_`、`remote_`、`watch_`、`schedule_`、`team_task_`、`mcp__<服务器>__*`）；没归组的留在「核心工具」，不可隐藏 |
+| 建议分组 | 「核心工具」里有 ≥3 个工具共享同一前缀（例如 `job_list` / `job_output` / `job_kill`）时，作为建议出现在状态里，一键变成规则 |
+| 自定义规则 | `toolgate.json` 的 `rules: [{ id, prefixes, exact?, label? }]` 可新增分组，或按 id 覆盖内置分组的前缀 |
+| 三档预设 | `lite` / `standard` / `full` 一键切换；预设永不隐藏 Skill 目录 |
+| 逐工具开关 | `disabledTools` 精确隐藏单个工具，`status.groups[].tools` 返回每个工具名与 token 估算 |
+| 分发守卫 | `restrict()` 只把 schema 从列表里摘掉，模型凭历史记忆仍可点名调用；新增的 `tools.guard()` 会在分发前二次拒绝，并说明是本会话还是全局闸门 |
+| 保护名单 | `read/write/edit/glob/grep/pwsh/present/todo_write/toolgate/ask_user_question` 任何配置都关不掉 |
+
+也可以用工具本身操作：`toolgate action=status` 看分组，`action=preset preset=lite` 切档，`action=tools tools=[...]` 精确隐藏，`action=session disabled=[...]` 只改本会话，`action=reset` 取消会话覆盖。
 
 ## 安装与更新
 

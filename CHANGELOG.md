@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.2.0 — 2026-11-13（本地构建，未发布 / local build, unpublished）
+
+- 分组从写死改成**数据**：`DEFAULT_RULES` 自带 ego / memory / remote / watch /
+  schedule / team，`toolgate.json` 的 `rules` 可按 id 覆盖或新增；`core` 仍然不可隐藏。
+- 新增 `deriveSuggestions()`：没归组的工具若共享同一前缀（≥3 个，如 `job_*`）会作为
+  「建议分组」出现在设置页的 status 里，点一下即可变成规则——插件不再需要为每个新包改代码。
+- 新增三档预设 `lite` / `standard` / `full`（`op: preset`），预设永不隐藏 `skills`。
+- 新增**逐工具**开关：`disabledTools` + `op: tools-set`，`groupReport().groups[].tools`
+  返回每个工具名与 token 估算，供 UI 渲染独立按钮。
+- 新增**dispatch guard**：`restrict()` 只从列表里摘掉 schema，模型凭历史记忆仍可点名调用；
+  现在 `tools.guard()` 会二次拦截并给出可读理由（按会话/全局分别提示）。
+- 保护名单 `PROTECTED_TOOLS`（read/write/edit/glob/grep/pwsh/present/todo_write/
+  toolgate/ask_user_question）不会被任何配置隐藏，避免把自己锁死。
+- 会话级覆盖（`action=session`）沿用原有语义，参数改为按规则校验。
+
+- Groups are data now: shipped `DEFAULT_RULES` plus per-id overrides in
+  `toolgate.json`; ungrouped tools stay in the un-hideable `core`.
+- `deriveSuggestions()` proposes a group for any ≥3 tools sharing a prefix, so a
+  new plugin shows up as a suggestion instead of requiring a code change.
+- Presets `lite` / `standard` / `full`; presets never hide `skills`.
+- Per-tool switches via `disabledTools` / `op: tools-set`, with per-tool rows and
+  token estimates in the status payload.
+- A dispatch guard (`tools.guard()`) refuses hidden tools that a model names from
+  history, with a scope-aware reason string.
+- `PROTECTED_TOOLS` keeps the escape hatches (read/write/pwsh/toolgate/…) visible
+  under every configuration.
+
 ## 0.1.8 — 2026-11-06
 
 - 默认固定宿主升级到 DSH rc.5，兼容验证扩展到 **0.2.2-rc.1**（2026-11-04 发布；
