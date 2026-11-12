@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import {
   DEFAULT_RULES, PRESETS, PRESET_IDS, PROTECTED_TOOLS,
   deriveSuggestions, groupOf, isDisabled, labelOf, normalizeDisabled,
-  normalizeRule, normalizeRules, normalizeToolList, toolHidden,
+  normalizeRule, normalizeRules, normalizeToolList, shouldApplyGate, toolHidden,
 } from '../lib/groups.js'
 
 test('rules drive grouping instead of a hardcoded table', () => {
@@ -48,6 +48,16 @@ test('protected tools stay visible under every configuration', () => {
 test('exact tool lists drop protected and malformed names', () => {
   assert.deepEqual(normalizeToolList(['a', 'a', 'read', 'bad name', 42]), ['a'])
   assert.deepEqual(normalizeToolList('a'), [])
+})
+
+test('a gate applies when either half is non-empty', () => {
+  assert.equal(shouldApplyGate([], []), false)
+  assert.equal(shouldApplyGate(['ego'], []), true)
+  // The per-tool switch alone must still reach restrict(): this is the shape
+  // that silently did nothing when only the group list was checked.
+  assert.equal(shouldApplyGate([], ['ego_click']), true)
+  assert.equal(shouldApplyGate(undefined, ['x']), true)
+  assert.equal(shouldApplyGate([], undefined), false)
 })
 
 test('presets never hide the skill catalog or core', () => {
