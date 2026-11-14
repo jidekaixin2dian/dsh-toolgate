@@ -28,7 +28,7 @@ Toolgate 为 DeepSeek Harness（DSH）提供统一的 MCP、Skill 和上下文�
 | 三档预设 | `lite` / `standard` / `full` 一键切换；预设永不隐藏 Skill 目录 |
 | 逐工具开关 | `disabledTools` 精确隐藏单个工具，`status.groups[].tools` 返回每个工具名与 token 估算 |
 | 分发守卫 | `restrict()` 只把 schema 从列表里摘掉，模型凭历史记忆仍可点名调用；新增的 `tools.guard()` 会在分发前二次拒绝，并说明是本会话还是全局闸门 |
-| 保护名单 | `read/write/edit/glob/grep/pwsh/present/todo_write/toolgate/ask_user_question` 任何配置都关不掉 |
+| 保护名单 | `read/write/edit/apply_patch/glob/grep/pwsh/present/todo_write/toolgate/ask_user_question` 任何配置都关不掉（`apply_patch` 是 DSH 0.2.2 起的多文件写入工具，与 write/edit 同级） |
 
 也可以用工具本身操作：`toolgate action=status` 看分组，`action=preset preset=lite` 切档，`action=tools tools=[...]` 精确隐藏，`action=session disabled=[...]` 只改本会话，`action=reset` 取消会话覆盖。
 
