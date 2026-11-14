@@ -5,12 +5,15 @@ const hosts = {
   'rc.3': { tag: 'dsh-v0.2.1-rc.3', sha: '1f81c047fc48fa190a683e469daa699857e9afe8', dir: 'rc3' },
   'rc.4': { tag: 'dsh-v0.2.1-rc.4', sha: '504a01a9578abc2c6f1fb896b1dc322c9fe24f66', dir: 'rc4' },
   // The 0.2.2 line moved off the dsh-v0.2.1 tag prefix, so entries carry full
-  // tags. rc.5 becomes the default pinned host; 0.2.2-rc.1 is verified as an
-  // extra host while it is a pre-release.
+  // tags. 0.2.2-rc.3 is the default pinned host: the tool-error classification
+  // and per-step tool activation contracts of 0.2.2 live there, and it is the
+  // first release whose installer fixes the Windows update loop. rc.5 stays
+  // selectable for the older 0.2.1 line.
   'rc.5': { tag: 'dsh-v0.2.1-rc.5', sha: 'b830ec950faba0a46dda564be3e2d854afed94f1', dir: 'rc5' },
   '0.2.2-rc.1': { tag: 'dsh-v0.2.2-rc.1', sha: '66491b05e3f05ad35bcdd4f6cd7ed26041d9e3db', dir: '022-rc1' },
+  '0.2.2-rc.3': { tag: 'dsh-v0.2.2-rc.3', sha: '38a6a5c965aa99ab525161efb7cc5cf1fe62fced', dir: '022-rc3' },
 }
-export const version = process.env.TOOLGATE_HOST_VERSION || 'rc.5'
+export const version = process.env.TOOLGATE_HOST_VERSION || '0.2.2-rc.3'
 const selected = hosts[version]
 if (!selected) throw new Error(`Unsupported fixed host: ${version}`)
 export const sha = selected.sha

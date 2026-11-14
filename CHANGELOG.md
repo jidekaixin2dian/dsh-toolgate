@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.1 — 2026-11-14
+
+**为什么值得更新**：DSH 0.2.2 起多了一个 `apply_patch`（一次新增、修改、删除、移动多个文件），它和 `write`/`edit` 是同一类写盘工具，却没被保护名单覆盖。在逐工具开关里点掉它，模型就只剩单文件写入路径，README 里「任何配置都关不掉」这句承诺也就不成立了。
+
+**Why update**: DSH 0.2.2 added `apply_patch` (create, edit, delete and move several files in one call). It is a write-path tool like `write`/`edit` but sat outside the protected list, so one per-tool switch could hide it and quietly break the "no configuration can hide these" promise.
+
+- 保护名单加入 `apply_patch`：与 `write`/`edit` 同级，`disabledTools`、规则、预设、会话覆盖都关不掉它。
+- Add `apply_patch` to `PROTECTED_TOOLS`; neither `disabledTools`, rules, presets, nor session overrides can hide it.
+- 回归宿主张新增 `0.2.2-rc.3` 并设为默认（`scripts/host.mjs`）；Windows 本地跑通 11 项，浏览器用例按设计跳过（CI 里 `TOOLGATE_BROWSER=1` 会跑）。
+- Pin `0.2.2-rc.3` as the default regression host; 11 Windows host tests pass and the browser-only case skips by design.
+
 ## 0.2.0 — 2026-11-13
 
 **为什么值得更新**：0.1.x 只能关 MCP / Skill / 记忆 / 定时这四类，ego、remote、watch、
