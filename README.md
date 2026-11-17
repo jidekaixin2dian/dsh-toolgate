@@ -38,10 +38,10 @@ Toolgate 为 DeepSeek Harness（DSH）提供统一的 MCP、Skill 和上下文�
 
 在插件市场搜索 **dsh-toolgate**，确认作者为 **jidekaixin2dian**。npm 与 GitHub 来源都支持版本检查；市场识别 npm 包后优先使用 npm，可在「已安装」中检查更新。目录与 registry 数据可能有同步延迟。
 
-也可完全退出 DSH 后执行以下命令；再次执行即可更新，随后重新打开 DSH：
+Desktop 用户在应用内插件市场安装、更新或卸载，按提示重启。Web/CLI 用户停止对应会话后，可对 `web` profile 执行以下命令；重复执行即可更新：
 
 ```powershell
-dsh plugin --profile desktop add @jidekaixin2dian/dsh-toolgate --registry=https://registry.npmjs.org
+dsh plugin --profile web add @jidekaixin2dian/dsh-toolgate --registry=https://registry.npmjs.org
 ```
 
 离线安装包见 [Release](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest)。桌面端运行期间请使用其插件管理器，遵守 profile 锁。
@@ -86,7 +86,7 @@ toolgate action=reset
 - 审计记录位于 `DSH_HOME/toolgate-audit.jsonl`。管理接口依赖宿主认证和当前 profile，缺失时拒绝访问。
 - 插件本身更新需要重开 DSH；已有 MCP 配置变更可由宿主热重载。
 
-卸载：退出 DSH 后执行 `dsh plugin --profile desktop remove @jidekaixin2dian/dsh-toolgate`，再重新打开。
+Web/CLI 卸载：停止对应会话后执行 `dsh plugin --profile web remove @jidekaixin2dian/dsh-toolgate`，再重新启动会话。
 
 ## 下载情况
 
