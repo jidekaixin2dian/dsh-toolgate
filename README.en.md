@@ -24,10 +24,10 @@ Requires **DSH >=0.2.1-rc.2 and Node >=24**. CI verifies DSH rc.2 / rc.3 / rc.4 
 
 Search for **dsh-toolgate**, author **jidekaixin2dian**, in the marketplace. Both npm and GitHub sources support version checks. Once the catalog recognizes the npm package it prefers npm; existing users can check under installed plugins. Catalog and registry data may take time to refresh.
 
-Alternatively, quit DSH and run the same command to install or update, then reopen it:
+Desktop users install, update and remove plugins through the in-app marketplace, restarting when prompted. Web/CLI users can stop the corresponding session and run this command for the `web` profile; repeat it to update:
 
 ```powershell
-dsh plugin --profile desktop add @jidekaixin2dian/dsh-toolgate --registry=https://registry.npmjs.org
+dsh plugin --profile web add @jidekaixin2dian/dsh-toolgate --registry=https://registry.npmjs.org
 ```
 
 Offline packages are available in [Releases](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest). While Desktop owns a running profile, use its plugin manager and respect profile locks.
@@ -70,7 +70,7 @@ Existing `.tgz` or local installations can use the same command in the same prof
 - Audit records are stored in `DSH_HOME/toolgate-audit.jsonl`. Management requires host authentication and the current profile, failing closed if either is missing.
 - Plugin updates require an app restart; existing MCP configuration changes can hot reload through the host.
 
-To remove, quit DSH, run `dsh plugin --profile desktop remove @jidekaixin2dian/dsh-toolgate`, then reopen it.
+For Web/CLI removal, stop the corresponding session, run `dsh plugin --profile web remove @jidekaixin2dian/dsh-toolgate`, then restart the session.
 
 ## Downloads
 
