@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.2 — 2026-11-17
+
+### 中文
+
+- 设置保存成功后再更新生效状态；写入失败时保留完整旧设置。
+- 设置页与模型工具共用分组、逐工具开关、预设和规则的修改流程，保留现有配置字段与核心工具保护。
+- 分离设置存储、运行态和分组报表，补充失败路径回归与工程文档；意外入口加载错误直接使测试失败。
+
+### English
+
+- Apply settings only after persistence succeeds; failed writes retain the complete previous settings.
+- Use the same commands for settings-page and model-tool changes to groups, per-tool switches, presets and rules, preserving configuration fields and core-tool protection.
+- Separate settings storage, runtime state and group reporting, with failure-path regressions and architecture documentation. Unexpected entry-loading errors now fail tests.
+
 ## 0.2.1 — 2026-11-14
 
 **为什么值得更新**：DSH 0.2.2 起多了一个 `apply_patch`（一次新增、修改、删除、移动多个文件），它和 `write`/`edit` 是同一类写盘工具，却没被保护名单覆盖。在逐工具开关里点掉它，模型就只剩单文件写入路径，README 里「任何配置都关不掉」这句承诺也就不成立了。
