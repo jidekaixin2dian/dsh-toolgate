@@ -4,19 +4,14 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { Readable } from 'node:stream'
+import { loadHostPeers } from './helpers/host-peers.js'
 
 // This file drives the real plugin entry point, which imports the DSH host
 // packages (`@deepseek-ai/schemastery`, `@deepseek-ai/dsh-tools`). They are
 // optional peers of this plugin and are not installed by `npm ci`, so on a
 // bare checkout the whole file reports as skipped instead of failing. Point
 // `node_modules` at a DSH install (or a profile) to run it for real.
-const hostPeers = await (async () => {
-  try {
-    return await import('../lib/index.js')
-  } catch (error) {
-    return { error: String(error?.message || error) }
-  }
-})()
+const hostPeers = await loadHostPeers(() => import('../lib/index.js'))
 const available = typeof hostPeers.apply === 'function'
 const skipReason = available
   ? false
