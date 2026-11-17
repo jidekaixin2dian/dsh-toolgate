@@ -2,7 +2,7 @@
 
 **让下一轮 prompt 只带需要的工具。**
 
-[English](README.en.md) · [npm · 0.2.0](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.2.0) · [插件市场](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [下载](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [更新记录](CHANGELOG.md)
+[English](README.en.md) · [npm · 0.2.2](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.2.2) · [插件市场](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [下载](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [更新记录](CHANGELOG.md)
 
 Toolgate 为 DeepSeek Harness（DSH）提供统一的 MCP、Skill 和上下文预算设置页。按服务器隐藏当前用不到的工具定义，让下一轮 prompt 聚焦当前任务；需要时恢复，MCP 配置和连接保持。
 
