@@ -9,12 +9,16 @@
 - `restrict()` 遇到会话作用域名字时逐个剔除并重试，而不是整条闸门失败；这些工具的实际调用仍由 dispatch guard 拦截。
 - 回归：单测桩改成「全局层 ⊂ agent 层」的真实分层，新用例在旧代码上失败、修复后通过。
 
+隔离装置实测（挂真实 `@deepseek-ai/dsh-tools` 0.2.2-rc.3 注册表，host root → preset → agent 作用域链，闸门设 `disabled: ["ego","watch","remote","schedule"]`）：agent 可见工具 **22 → 13**，**2657 → 1461 tokens**（省 1196），`applied` 由 `[]` 变为 `["sess-1"]`。
+
 **Why update**: since 0.2.0, hiding a group changed settings but not the request. DSH 0.2.2 composes tool rows in the **agent preset scope**, while the gate built its deny list from the host root's global view — which holds only the gate's own global tools. The deny list stayed empty, `tools.restrict()` was never called, `applied` was `[]` and every group reported `hideableTokens: 0` except `core`.
 
 - Build the deny list from the **agent view** (`tools.schemas(agent)`), the definitions the model actually receives.
 - Count only names the host accepts as hideable; tools registered in the Agent's own scope are reported separately as `scoped`.
 - Drop names the host refuses and retry, instead of failing the whole restriction; the dispatch guard still blocks those calls.
 - Regression: the unit stub now models the real global-vs-agent layering; the new case fails on the old code and passes with the fix.
+
+Measured in an isolation harness that mounts the real `@deepseek-ai/dsh-tools` 0.2.2-rc.3 registry over a host root → preset → agent scope chain, with the gate set to `disabled: ["ego","watch","remote","schedule"]`: agent-visible tools **22 → 13**, **2657 → 1461 tokens** (1196 saved), and `applied` went from `[]` to `["sess-1"]`.
 
 ## 0.2.2 — 2026-11-17
 
