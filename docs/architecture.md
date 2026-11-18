@@ -14,6 +14,8 @@
 | `host-paths.js` | 从宿主取得 profile、home 和选中工作区，统一可选服务读取 |
 | `client.js` | 设置页展示和请求；不直接写文件 |
 
+`restrict()` 的 deny 名单只能来自 **agent 视图**（`tools.schemas(agent)`）。宿主根视图（无 scope 的 `tools.schemas()`）只有全局层的注册；桌面把工具行组合在 agent preset 作用域，从根视图算出来的名单恒为空，闸门就成了只写设置的开关。宿主对 `restrict()` 的校验同样按作用域：继承来的名字（全局 + 祖先作用域）可以 deny，Agent 自身作用域注册的工具会让整条调用抛错，`index.js` 逐个剔除后重试，并把它们作为 `scoped` 单独上报。
+
 设置命令先保存候选值，成功后更新共享设置对象。Skill provider 持有同一设置对象，其来源身份和失败恢复仍由 skills-runtime 管理。运行资源不写进 toolgate.json。
 
 具名 preset 是 lite/standard/full；前端 applyGroupSelection 表示一次组选项修改。会话覆盖独立于全局设置。restrict 控制模型看见的 schema，guard 检查实际调用，二者使用相同隐藏判定。
