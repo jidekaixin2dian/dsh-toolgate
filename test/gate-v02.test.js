@@ -24,14 +24,22 @@ const check = (name, fn) => (available ? test(name, fn) : test(name, { skip: ski
 const home = fs.mkdtempSync(path.join(os.tmpdir(), 'toolgate-gate-'))
 process.env.DSH_HOME = home
 
-const schemas = [
+// Host root registrations only (a profile bundle row mounting a tool plugin at
+// the top of the tree). The desktop composes its real tool rows per agent
+// preset, so the model-facing set below is what an Agent inherits — and the
+// global view the old code read is exactly this short list.
+const GLOBAL_SCHEMAS = [
   { name: 'read', description: 'read', parameters: {} },
   { name: 'pwsh', description: 'shell', parameters: {} },
   { name: 'toolgate', description: 'gate', parameters: {} },
+]
+const PRESET_SCHEMAS = [
   { name: 'ego_navigate', description: 'open', parameters: {} },
   { name: 'ego_click', description: 'click', parameters: {} },
   { name: 'mnemon_recall', description: 'recall', parameters: {} },
 ]
+const schemas = [...GLOBAL_SCHEMAS, ...PRESET_SCHEMAS]
+const globalNames = new Set(GLOBAL_SCHEMAS.map(schema => schema.name))
 
 const registered = []
 const guards = []
@@ -47,9 +55,12 @@ const skillsSvc = {
 }
 const services = { connection: { requestRejection: () => undefined }, skills: skillsSvc, tools: null }
 const toolsSvc = {
-  // An agent-scoped view honours the active restriction, so the tests observe
-  // the real effect instead of trusting the deny list alone.
-  schemas: (agent) => (agent ? schemas.filter(schema => !denied.has(schema.name)) : schemas),
+  // A scoped view resolves global + preset/own layers minus the active
+  // restriction; the unscoped view is the global layer alone. Both halves
+  // matter: hiding the difference is how the gate silently stopped working.
+  schemas: (scope) => (scope
+    ? schemas.filter(schema => !denied.has(schema.name))
+    : schemas.filter(schema => globalNames.has(schema.name))),
   register: (tool) => registered.push(tool),
   guard: (fn) => { guards.push(fn); return () => { guards.length = 0 } },
   restrict: (options) => {
@@ -164,4 +175,27 @@ check('http preset round-trips and rejects an unknown preset', async () => {
   assert.deepEqual(ok.body.disabled.slice().sort(), ['ego', 'remote', 'watch'])
   const bad = await http({ op: 'preset', preset: 'nope' })
   assert.equal(bad.code, 400)
+})
+
+// The regression this file existed to miss: the gate built its deny list from
+// the global layer, which holds none of the tools the model is actually sent,
+// so every group reported hideableTokens 0 and restrict() never ran.
+check('preset-scoped tools are hideable, counted, and really reach restrict()', async () => {
+  await tool.execute({ action: 'reset' }, { agent })
+  await http({ op: 'tools-set', args: { tools: [] } })
+  await http({ op: 'set', args: { disabled: [] } })
+  events['agent/pre-step']({ agent })
+  const clean = await http({ op: 'status' })
+  assert.deepEqual(clean.body.applied, [])
+  assert.ok(clean.body.groups.find(group => group.id === 'ego').hideableTokens > 0,
+    'preset-scoped tools must be counted as hideable')
+  assert.equal(clean.body.scoped, 0)
+
+  await http({ op: 'preset', args: { preset: 'standard' } })
+  events['agent/pre-step']({ agent })
+  const gated = await http({ op: 'status' })
+  assert.deepEqual(gated.body.applied, ['gate-1'])
+  assert.ok(gated.body.totals.saved > 0)
+  assert.ok(gated.body.groups.find(group => group.id === 'ego').hideableTokens > 0)
+  assert.equal(ctx.tools.schemas(agent).length, schemas.length - 2)
 })

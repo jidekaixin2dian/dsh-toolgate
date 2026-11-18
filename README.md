@@ -2,7 +2,7 @@
 
 **让下一轮 prompt 只带需要的工具。**
 
-[English](README.en.md) · [npm · 0.2.2](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.2.2) · [插件市场](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [下载](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [更新记录](CHANGELOG.md)
+[English](README.en.md) · [npm · 0.2.3](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.2.3) · [插件市场](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [下载](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [更新记录](CHANGELOG.md)
 
 Toolgate 为 DeepSeek Harness（DSH）提供统一的 MCP、Skill 和上下文预算设置页。按服务器隐藏当前用不到的工具定义，让下一轮 prompt 聚焦当前任务；需要时恢复，MCP 配置和连接保持。
 
@@ -17,6 +17,16 @@ Toolgate 为 DeepSeek Harness（DSH）提供统一的 MCP、Skill 和上下文�
 | Skills | 按会话工作区搜索、新建、启停；可删除的本地 Skill 移到回收目录 |
 
 按组隐藏当前任务用不到的工具，需要时一键恢复。配置和运行中的 MCP 保留，下一轮 prompt 使用调整后的工具列表。页面按工具 schema 和描述长度估算 token，占用与实际费用或速度不是同一指标。设置页预算作用于所有会话和子代理，允许的会话覆盖只影响当前会话。
+
+## 0.2.3：隐藏分组真的从下一轮请求里消失
+
+DSH 0.2.2 把工具行组合在 **agent preset 作用域**。0.2.2 及更早的闸门却从宿主根的全局视图（无 scope 的 `tools.schemas()`）算 deny 名单——根视图里只有闸门自己那几个全局工具，名单恒为空，`tools.restrict()` 一次都没被调用：隐藏分组只改设置，不改请求。0.2.3 改成按 agent 视图取名单。隔离装置挂真实宿主注册表实测：agent 可见工具 **22 → 13**，**2657 → 1461 tokens**（省 1196）。
+
+| 修复 | 说明 |
+|---|---|
+| deny 名单来源 | 用 `tools.schemas(agent)`（含 preset 作用域继承来的工具），即模型真正收到的定义；`applied` 与各组 `hideableTokens` 变成真实值 |
+| 会话自身作用域工具 | 宿主 `restrict()` 会因作用域外名字整条抛错，现在逐个剔除后重试，单独计入 `status.scoped`，不再混进可省 token；这些工具的实际调用仍由分发守卫拦截 |
+| 回归 | 单测桩改成「全局层 ⊂ agent 层」的真实分层，新用例在旧代码上失败、修复后通过 |
 
 ## 0.2.0：分组是数据，不是写死的表
 

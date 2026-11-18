@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.2.3 — 2026-11-19
+
+**为什么值得更新**：0.2.0 起「隐藏分组」一直只改设置、不改请求。DSH 0.2.2 把工具行组合在 **agent preset 作用域**，而闸门是从宿主根的全局视图里算 deny 名单的——根视图里只有工具闸门自己那几个全局工具，于是 deny 恒为空，`tools.restrict()` 一次都没被调用：`applied` 空、每个组的 `hideableTokens` 为 0，只有 `core` 有数字。
+
+- deny 名单改用 **agent 视图**（`tools.schemas(agent)`，含 preset 作用域继承来的工具），这是模型真正收到的那一份；`applied` 与 `hideableTokens` 随之变成真实值。
+- `hideableTokens` / `scoped` 只统计宿主 `restrict()` 能接受的名字：被宿主拒绝的会话自身作用域工具（动态注册的 MCP 等）单独上报，不再混进可省 token。
+- `restrict()` 遇到会话作用域名字时逐个剔除并重试，而不是整条闸门失败；这些工具的实际调用仍由 dispatch guard 拦截。
+- 回归：单测桩改成「全局层 ⊂ agent 层」的真实分层，新用例在旧代码上失败、修复后通过。
+
+**Why update**: since 0.2.0, hiding a group changed settings but not the request. DSH 0.2.2 composes tool rows in the **agent preset scope**, while the gate built its deny list from the host root's global view — which holds only the gate's own global tools. The deny list stayed empty, `tools.restrict()` was never called, `applied` was `[]` and every group reported `hideableTokens: 0` except `core`.
+
+- Build the deny list from the **agent view** (`tools.schemas(agent)`), the definitions the model actually receives.
+- Count only names the host accepts as hideable; tools registered in the Agent's own scope are reported separately as `scoped`.
+- Drop names the host refuses and retry, instead of failing the whole restriction; the dispatch guard still blocks those calls.
+- Regression: the unit stub now models the real global-vs-agent layering; the new case fails on the old code and passes with the fix.
+
 ## 0.2.2 — 2026-11-17
 
 ### 中文
