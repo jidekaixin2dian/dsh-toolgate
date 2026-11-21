@@ -37,6 +37,8 @@ test('disabled ids are validated against the rules that exist', () => {
 })
 
 test('protected tools stay visible under every configuration', () => {
+  assert.ok(PROTECTED_TOOLS.includes('bash'))
+  assert.ok(PROTECTED_TOOLS.includes('pwsh'))
   for (const name of PROTECTED_TOOLS) {
     assert.equal(toolHidden(name, ['core'], [name], []), false, name + ' must stay visible')
   }
