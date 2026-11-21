@@ -2,7 +2,7 @@
 
 **Bring only the tools you need into the next prompt.**
 
-[中文](README.md) · [npm · 0.2.3](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.2.3) · [Marketplace](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [Download](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [Changelog](CHANGELOG.md)
+[中文](README.md) · [npm · 0.2.4](https://www.npmjs.com/package/@jidekaixin2dian/dsh-toolgate/v/0.2.4) · [Marketplace](https://awesome-dsh-plugin.com/p/jidekaixin2dian/dsh-toolgate/) · [Download](https://github.com/jidekaixin2dian/dsh-toolgate/releases/latest) · [Changelog](CHANGELOG.md)
 
 Toolgate brings MCP servers, skills and context budgets into one DeepSeek Harness (DSH) settings page. Hide tool definitions by server to focus the next prompt on the current task, then restore them when needed. MCP configuration and connections stay in place.
 
@@ -20,7 +20,7 @@ Hide tool groups unrelated to the current task and restore them in one click whe
 
 ## Install and update
 
-Requires **DSH >=0.2.1-rc.2 and Node >=24**. CI verifies DSH rc.2 / rc.3 / rc.4 / rc.5 / 0.2.2-rc.1.
+Requires **DSH >=0.2.1-rc.2 and Node >=24**. CI verifies DSH rc.2 / rc.3 / rc.4 / 0.2.2-rc.1 / 0.2.2-rc.5.
 
 Search for **dsh-toolgate**, author **jidekaixin2dian**, in the marketplace. Both npm and GitHub sources support version checks. Once the catalog recognizes the npm package it prefers npm; existing users can check under installed plugins. Catalog and registry data may take time to refresh.
 

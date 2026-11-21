@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.2.4 — 2026-11-21
+
+### 中文
+
+- 兼容验证扩展到 DSH **0.2.2-rc.5**（`9c2670d3`）并设为默认回归宿主，CI 同步运行 Windows / Linux 单元、宿主与浏览器检查。
+- 修复设置页「精简模式」按钮仍走旧版硬编码列表的问题：预算页现直接调用真实三档预设接口（完整预设 / 标准预设 / 精简预设），高亮当前生效预设，且预设不再误隐藏 `skills`。
+- 设置页补全逐工具开关与建议分组交互：每个分组支持展开查看工具明细与 token 估算并单独隐藏或恢复（受保护工具保持锁定），发现可聚类前缀时可一键「建为分组」，存在已注销工具名时支持一键清理。
+- 保护名单新增 `bash`（与 `pwsh` 同级），避免 Linux / macOS profile 误关 shell 逃生通道；模型 `toolgate action=status` 输出同步列出当前预设与单独隐藏的工具名。
+
+### English
+
+- Extend verified host compatibility to DSH **0.2.2-rc.5** (`9c2670d3`) and make it the default regression host; CI runs Windows/Linux unit, host and browser suites against it.
+- Fix the settings page preset button that still sent a legacy hardcoded list: the Budget tab now invokes the real `preset` endpoint (`full` / `standard` / `lite`), highlights the active preset, and no longer hides `skills` via presets.
+- Surface per-tool switches and group suggestions in the Budget UI: expand any group to inspect per-tool token estimates and toggle individual tools (protected tools stay locked), adopt suggested prefix groups in one click, and clean up stale `unknownTools` entries.
+- Add `bash` to `PROTECTED_TOOLS` alongside `pwsh` so Linux/macOS profiles retain their shell escape hatch, and include the active preset and `disabledTools` in `toolgate action=status`.
+
 ## 0.2.3 — 2026-11-19
 
 **为什么值得更新**：0.2.0 起「隐藏分组」一直只改设置、不改请求。DSH 0.2.2 把工具行组合在 **agent preset 作用域**，而闸门是从宿主根的全局视图里算 deny 名单的——根视图里只有工具闸门自己那几个全局工具，于是 deny 恒为空，`tools.restrict()` 一次都没被调用：`applied` 空、每个组的 `hideableTokens` 为 0，只有 `core` 有数字。

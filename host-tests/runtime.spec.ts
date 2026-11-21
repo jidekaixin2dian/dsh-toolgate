@@ -271,6 +271,10 @@ it.skipIf(process.env.TOOLGATE_BROWSER !== '1')('real browser settings preserve 
   }
   mark('prepare-host')
   const h = await harness({ prepare(home) { skill(join(home, 'shared-agents', 'skills'), 'shared-demo') } })
+  for (const name of ['ego_click', 'job_list', 'job_output', 'job_kill']) {
+    h.ctx.tools.register(defineTool({ name, description: 'synthetic ' + name, parameters: {},
+      output: { schema: { type: 'string' }, render: (_args, value) => [{ type: 'text', text: value }] }, execute: () => 'ok' }))
+  }
   await h.create('a', h.a); await h.create('b', h.b)
   mark('build-fixture')
   const boot = buildSync({ stdin: { contents: `
@@ -305,6 +309,19 @@ it.skipIf(process.env.TOOLGATE_BROWSER !== '1')('real browser settings preserve 
     expect(await page.getByRole('link', { name: '反馈问题', exact: true }).getAttribute('target')).toBe('_blank')
   }
   await checkProjectLinks()
+  mark('budget-presets-tools-suggestions')
+  await page.getByRole('button', { name: '精简预设', exact: true }).click()
+  await expect.poll(() => JSON.parse(fs.readFileSync(join(h.home, 'toolgate.json'), 'utf8')).preset).toBe('lite')
+  expect(JSON.parse(fs.readFileSync(join(h.home, 'toolgate.json'), 'utf8')).disabled).not.toContain('skills')
+  await page.getByRole('button', { name: '完整预设', exact: true }).click()
+  await expect.poll(() => JSON.parse(fs.readFileSync(join(h.home, 'toolgate.json'), 'utf8')).preset).toBe('full')
+  await page.getByRole('button', { name: '建为分组', exact: true }).click()
+  await expect.poll(() => JSON.parse(fs.readFileSync(join(h.home, 'toolgate.json'), 'utf8')).rules.some((r: any) => r.id === 'job')).toBe(true)
+  await page.locator('.cb-row').filter({ hasText: 'Ego 浏览器' }).getByRole('button', { name: '工具', exact: true }).click()
+  await page.locator('.cb-tool-row').filter({ hasText: 'ego_click' }).getByRole('button', { name: '隐藏工具', exact: true }).click()
+  await expect.poll(() => JSON.parse(fs.readFileSync(join(h.home, 'toolgate.json'), 'utf8')).disabledTools).toContain('ego_click')
+  await page.locator('.cb-tool-row').filter({ hasText: 'ego_click' }).getByRole('button', { name: '恢复工具', exact: true }).click()
+  await expect.poll(() => JSON.parse(fs.readFileSync(join(h.home, 'toolgate.json'), 'utf8')).disabledTools).toEqual([])
   mark('create-mcp')
   await page.getByRole('button', { name: 'MCP 服务器', exact: true }).click()
   await checkProjectLinks()

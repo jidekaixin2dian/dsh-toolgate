@@ -12,8 +12,9 @@ const hosts = {
   'rc.5': { tag: 'dsh-v0.2.1-rc.5', sha: 'b830ec950faba0a46dda564be3e2d854afed94f1', dir: 'rc5' },
   '0.2.2-rc.1': { tag: 'dsh-v0.2.2-rc.1', sha: '66491b05e3f05ad35bcdd4f6cd7ed26041d9e3db', dir: '022-rc1' },
   '0.2.2-rc.3': { tag: 'dsh-v0.2.2-rc.3', sha: '38a6a5c965aa99ab525161efb7cc5cf1fe62fced', dir: '022-rc3' },
+  '0.2.2-rc.5': { tag: 'dsh-v0.2.2-rc.5', sha: '9c2670d3bce5275e0d1610272958121af87787bb', dir: '022-rc5' },
 }
-export const version = process.env.TOOLGATE_HOST_VERSION || '0.2.2-rc.3'
+export const version = process.env.TOOLGATE_HOST_VERSION || '0.2.2-rc.5'
 const selected = hosts[version]
 if (!selected) throw new Error(`Unsupported fixed host: ${version}`)
 export const sha = selected.sha
