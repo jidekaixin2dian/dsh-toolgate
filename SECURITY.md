@@ -1,6 +1,6 @@
 # Security
 
-Management HTTP requests use the running DSH Connection service's authentication and Host/Origin checks. Missing authentication support closes the endpoint. This requires a host exposing `connection.requestRejection()`; the integration suite pins DSH 0.2.1-rc.2. A public plugin header is an additional request marker, never a credential.
+Management HTTP requests use the running DSH Connection service's authentication and Host/Origin checks. The route declares `auth: 'required'`, and the handler then takes whatever admission seam the host exposes, newest first: an admitted Peer handed to the handler (DSH 0.2.3+), `connection.admit()` (0.2.3+), or `connection.requestRejection()` (0.2.1–0.2.2). Missing authentication support closes the endpoint with 503. A public plugin header is an additional request marker, never a credential.
 
 MCP environment and header values are not returned in management responses. Leave their replacement controls unchecked to retain existing values. Configuration edits preserve unrelated nodes and create recoverable copies under `DSH_HOME/backups/toolgate/` before writing. These backups contain original configuration, including secrets; keep them private. After a successful write only the 20 most recent backup copies are retained; failed writes keep their recovery copy. Every management write also appends one JSON line (operation, target, outcome, timestamp — never secret values) to `DSH_HOME/toolgate-audit.jsonl`, rotated past 1 MiB.
 

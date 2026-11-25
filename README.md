@@ -44,7 +44,7 @@ DSH 0.2.2 把工具行组合在 **agent preset 作用域**。0.2.2 及更早的�
 
 ## 安装与更新
 
-需要 **DSH >=0.2.1-rc.2、Node >=24**；持续验证 DSH rc.2 / rc.3 / rc.4 / 0.2.2-rc.1 / 0.2.2-rc.5。
+需要 **DSH >=0.2.1-rc.2、Node >=24**；持续验证 DSH rc.2 / rc.3 / rc.4 / 0.2.2-rc.1 / 0.2.2-rc.5。0.2.3 起宿主改用路由 `auth` 策略 + `connection.admit()`，管理接口已同时适配两代鉴权（0.2.5 起）；0.2.3-alpha.2 上实测未认证 401、认证后 200。
 
 在插件市场搜索 **dsh-toolgate**，确认作者为 **jidekaixin2dian**。npm 与 GitHub 来源都支持版本检查；市场识别 npm 包后优先使用 npm，可在「已安装」中检查更新。目录与 registry 数据可能有同步延迟。
 
