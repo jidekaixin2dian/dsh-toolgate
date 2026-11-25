@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.2.5 — 2026-11-26
+
+**为什么值得更新**：DSH 0.2.3 删掉了 `connection.requestRejection()`，改用路由级 `auth` 策略加 `connection.admit()`。插件仍在调那个不存在的函数，于是设置页「工具闸门」直接弹红条 `host authentication unavailable`，整个管理接口（分组、逐工具开关、MCP、Skill）全部 503 不可用——装上去就是个坏面板。0.2.5 把这道缝同时接住新旧两代宿主。
+
+### 中文
+
+- 管理路由声明 `auth: 'required'`：0.2.3+ 由宿主在进入处理器之前就拒绝未认证请求，实测未带凭证直接 `401 unauthorized`。
+- 鉴权收敛到新文件 `lib/route-auth.js`，按新到旧尝试：已认证 Peer（宿主已放行）→ `connection.admit()`（0.2.3+，`{peer}` / `{rejection:401|403|503}`）→ `connection.requestRejection()`（0.2.1–0.2.2）。宿主一种都不提供时端点仍然关闭（503），不会退化成匿名可写。
+- `admit()` 的入参用 Host 头与 socket 方案补回绝对 URL，Host/Origin 校验与宿主原生路由一致；异常按「未认证」处理，不按「已通过」。
+- 回归：`test/route-auth.test.js` 直接覆盖两代接口的放行/拒绝/失败关闭路径与 URL 重建（6 项，无需装 DSH peer 即可跑）。
+- 真机验证（DSH 0.2.3-alpha.2，隔离 `DSH_HOME`，挂真实 `WebServer` + `Connection`）：未认证 `401`、认证后 `200` 且返回真实分组、缺插件标头 `403`、非 POST `405`，全程不再出现 `host authentication unavailable`。
+
+### English
+
+- Declare `auth: 'required'` on the management route: on 0.2.3+ the host refuses unauthenticated calls before the handler runs (measured `401 unauthorized`).
+- Move the admission decision into `lib/route-auth.js`, newest seam first: an already admitted Peer, then `connection.admit()` (0.2.3+, `{peer}` / `{rejection: 401|403|503}`), then `connection.requestRejection()` (0.2.1–0.2.2). A host exposing none of them still closes the endpoint with 503 instead of degrading to anonymous writes.
+- Rebuild the absolute URL for `admit()` from the Host header and the socket scheme, so the host's Host/Origin fences see the same authority as its native routes; a thrown admission counts as unauthenticated, never as admitted.
+- Regression: `test/route-auth.test.js` covers admit/reject/fail-closed and URL reconstruction for both seams (6 cases, no DSH peer needed).
+- Verified against DSH 0.2.3-alpha.2 with an isolated `DSH_HOME` and the real `WebServer` + `Connection`: unauthenticated `401`, authenticated `200` with live group data, missing plugin header `403`, non-POST `405`, and no `host authentication unavailable` anywhere.
+
 ## 0.2.4 — 2026-11-21
 
 ### 中文
