@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.2.6 — 2026-11-28
+
+**为什么值得更新**：DSH 0.2.3 的宿主 composer（`applyEntryPatches`）起手就返回 `{ data, index }` 而不是条目数组，插件的 MCP 列表仍按数组遍历，于是设置页「工具闸门 → MCP」整块报 `TypeError: rows.flatMap is not a function`，新增 / 编辑 / 删除 / 启停一并不可用。0.2.6 在遍历之前先认形状，认不出的形状退化成「没有服务器」，面板不会再被一条清单拖死。
+
+### 中文
+
+- 新增 `asRows()` 归一化：数组 / `{ data }` / `{ rows }` / `{ servers }` / 其它 → 空表。
+- `read()` 里 `basePatches()` 与 `overlays` 一起归一化；`composePatches()` 的入参做同样防御，与宿主 composer 的 oracle 对照语义不变。
+- `flatten()` 跳过空洞行，group 展开遇到半结构化数据时不再抛错。
+- 回归：`test/mcp-config.test.js` 新增 7 种 composer 返回形状 + 包装后的 base/overlays 用例；`npm test` 78 tests / 67 pass / 0 fail / 11 skipped（skip 为需要真宿主的分支）；CI 的 unit + host（Windows / Linux）四个 job 全绿，含 DSH rc.2 / rc.3 / rc.4 / 0.2.2-rc.1 / 0.2.2-rc.5 五档宿主与浏览器回归。
+
+### English
+
+- Add `asRows()`: array / `{ data }` / `{ rows }` / `{ servers }` / anything else → an empty list.
+- Normalize `basePatches()` and `overlays` in `read()`, and defend the `composePatches()` inputs the same way, without changing the oracle comparison against the host composer.
+- `flatten()` skips empty rows, so half-structured group contents can no longer throw.
+- Regression: `test/mcp-config.test.js` gains 7 composer result shapes plus wrapped base/overlays; `npm test` 78 tests / 67 pass / 0 fail / 11 skipped (host-dependent skips); all four CI jobs (unit + host, Windows / Linux) green, including the rc.2 / rc.3 / rc.4 / 0.2.2-rc.1 / 0.2.2-rc.5 host matrix and browser checks.
+
 ## 0.2.5 — 2026-11-26
 
 **为什么值得更新**：DSH 0.2.3 删掉了 `connection.requestRejection()`，改用路由级 `auth` 策略加 `connection.admit()`。插件仍在调那个不存在的函数，于是设置页「工具闸门」直接弹红条 `host authentication unavailable`，整个管理接口（分组、逐工具开关、MCP、Skill）全部 503 不可用——装上去就是个坏面板。0.2.5 把这道缝同时接住新旧两代宿主。
