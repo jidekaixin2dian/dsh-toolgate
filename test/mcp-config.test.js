@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
-import { addServer, editServer, listServers, removeServer, setServerEnabled } from '../lib/mcp-config.js'
+import { addServer, createMcpConfig, editServer, listServers, removeServer, setServerEnabled } from '../lib/mcp-config.js'
 
 function withTempProfile() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cb-mcp-'))
@@ -55,6 +55,35 @@ test('MCP add / edit / disable / remove round-trip', () => {
 
     removeServer('demo')
     assert.equal(listServers().rows.length, 0)
+  } finally {
+    temp.restore()
+  }
+})
+
+test('MCP listing survives composer results that are not entry arrays', () => {
+  const temp = withTempProfile()
+  try {
+    const row = { id: 'demo', name: '@deepseek-ai/dsh-mcp-client', config: { serverName: 'demo', transport: 'stdio', command: 'npx' } }
+    const shapes = [
+      ['plain array', [], 0],
+      ['undefined', undefined, 0],
+      ['empty object', {}, 0],
+      ['{ rows: [] }', { rows: [] }, 0],
+      ['{ servers: [] }', { servers: [] }, 0],
+      ['host PatchResult (empty)', { data: [], index: {} }, 0],
+      ['host PatchResult (one server)', { data: [row], index: {} }, 1],
+    ]
+    for (const [label, shape, expected] of shapes) {
+      const listing = createMcpConfig({ compose: () => shape }).listServers()
+      assert.ok(Array.isArray(listing.rows), label)
+      assert.equal(listing.rows.length, expected, label)
+    }
+    const listing = createMcpConfig({ compose: () => ({ data: [row], index: {} }) }).listServers()
+    assert.equal(listing.rows[0].id, 'demo')
+    assert.equal(listing.rows[0].level, 'bundle')
+    assert.equal(listing.rows[0].editable, false)
+    const withWrappedBase = createMcpConfig({ compose: () => [], basePatches: () => ({ data: [] }), overlays: { rows: [] } }).listServers()
+    assert.deepEqual(withWrappedBase.rows, [])
   } finally {
     temp.restore()
   }
